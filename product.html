@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>StudentMart - Buy & Sell Study Materials</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #022a53;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+
+    .btn-home {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      background: #022a53;
+      color: white;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 500;
+      text-decoration: none;
+      z-index: 100;
+    }
+
+    .btn-home:hover {
+      background: #034080;
+      transform: translateY(-2px);
+    }
+
+    /* Search and Filter Section */
+    .controls {
+      max-width: 1200px;
+      margin: 0 auto 30px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+      max-width: 400px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 40px 12px 15px;
+      border: 2px solid #ddd;
+      border-radius: 25px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.3s;
+      background: white;
+    }
+
+    .search-box input:focus {
+      border-color: #022a53;
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #022a53;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-group select {
+      padding: 10px 15px;
+      border: 2px solid #ddd;
+      border-radius: 20px;
+      background: white;
+      color: #022a53;
+      font-size: 14px;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    .filter-group select:hover {
+      border-color: #022a53;
+    }
+
+    /* Cards Grid */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .card-image {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      background: #f0f0f0;
+    }
+
+    .card-content {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card h3 {
+      font-size: 1.4rem;
+      color: #022a53;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 8px;
+      flex: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+      font-size: 13px;
+      color: #888;
+    }
+
+    .card .price {
+      font-weight: bold;
+      color: #d32f2f;
+      font-size: 1.5rem;
+      margin: 10px 0;
+    }
+
+    .seller-info {
+      background: #f5f5f5;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+
+    .seller-info strong {
+      color: #022a53;
+    }
+
+    .card-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .card button {
+      flex: 1;
+      padding: 12px;
+      background-color: #022a53;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+
+    .card button:hover {
+      background-color: #034080;
+      transform: scale(1.02);
+    }
+
+    .btn-delete {
+      background-color: #d32f2f !important;
+      flex: 0.3;
+    }
+
+    .btn-delete:hover {
+      background-color: #b71c1c !important;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      width: 500px;
+      max-width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0px 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .modal-content h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #022a53;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #022a53;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #022a53;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: #022a53;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .submit-btn:hover {
+      background: #034080;
+      transform: translateY(-2px);
+    }
+
+    .close {
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #666;
+      transition: color 0.3s;
+    }
+
+    .close:hover {
+      color: #d32f2f;
+    }
+
+    .open-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #022a53;
+      color: white;
+      padding: 18px 30px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(2,42,83,0.4);
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .open-btn:hover {
+      background: #034080;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(2,42,83,0.5);
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+      font-size: 1.2rem;
+    }
+
+    .success-message {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: #4caf50;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 1001;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Detail Modal */
+    .detail-modal-content {
+      max-width: 600px;
+    }
+
+    .detail-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .detail-info {
+      margin: 15px 0;
+    }
+
+    .detail-info h3 {
+      color: #022a53;
+      margin-bottom: 10px;
+    }
+
+    .detail-info p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 10px;
+      }
+
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-box {
+        max-width: 100%;
+      }
+
+      .open-btn {
+        bottom: 20px;
+        right: 20px;
+        padding: 15px 25px;
+      }
+
+      .modal-content {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.5rem;
+      }
+
+      .card-buttons {
+        flex-direction: column;
+      }
+
+      .btn-delete {
+        flex: 1;
+      }
+    }
+
+    /* Professional Footer Styles */
+    .footer {
+      background: linear-gradient(135deg, #022a53 0%, #034080 100%);
+      color: white;
+      margin-top: 80px;
+      padding: 50px 20px 20px;
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      padding-bottom: 30px;
+    }
+
+    .footer-section h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+
+    .footer-section h4 {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      color: #c7ebe3;
+      font-weight: 600;
+    }
+
+    .footer-section p {
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+    }
+
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-section ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-section ul li a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: all 0.3s;
+      font-size: 14px;
+      display: inline-block;
+    }
+
+    .footer-section ul li a:hover {
+      color: #c7ebe3;
+      transform: translateX(5px);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    body {
+
+  background: #97cdc1;
+}    
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+    }
+
+    .social-links a:hover {
+      background: #c7ebe3;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(199, 235, 227, 0.3);
+    }
+
+    .footer-bottom {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-bottom p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="btn-home">🏠 Home</a>
+
+  <header>
+    <h1>📚 StudentMart</h1>
+    <p>Buy & Sell Study Materials with Fellow Students</p>
+  </header>
+
+  <!-- Search and Filter Controls -->
+  <div class="controls">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search by book name or subject...">
+      <span class="search-icon">🔍</span>
+    </div>
+    <div class="filter-group">
+      <select id="sortSelect">
+        <option value="newest">Newest First</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+      </select>
+      <select id="conditionFilter">
+        <option value="all">All Conditions</option>
+        <option value="new">New</option>
+        <option value="used">Used</option>
+        <option value="like-new">Like New</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Cards Container -->
+  <section class="cards" id="cardsContainer">
+    <!-- Cards will be dynamically inserted here -->
+  </section>
+
+  <!-- Post Book Button -->
+  <button id="openModalBtn" class="open-btn">+ Post a Book</button>
+
+  <!-- Post Book Modal -->
+  <div id="bookModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>📖 Post Your Book</h2>
+
+      <form id="bookForm">
+        <div class="form-group">
+          <label for="bookName">Book Name *</label>
+          <input type="text" id="bookName" placeholder="Enter book name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="subject">Subject *</label>
+          <select id="subject" required>
+            <option value="">Select Subject</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Biology">Biology</option>
+            <option value="Physics">Physics</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Engineering">Engineering</option>
+            <option value="Python">Python</option>
+            <option value="Java">Java</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" placeholder="Brief description of the book..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="condition">Book Condition *</label>
+          <select id="condition" required>
+            <option value="">Select Condition</option>
+            <option value="new">New</option>
+            <option value="like-new">Like New</option>
+            <option value="used">Used - Good</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="publishYear">Publish Year</label>
+          <input type="number" id="publishYear" placeholder="e.g., 2021" min="1950" max="2025">
+        </div>
+
+        <div class="form-group">
+          <label for="price">Price (₹) *</label>
+          <input type="number" id="price" placeholder="Enter price" required min="0" step="1">
+        </div>
+
+        <div class="form-group">
+          <label for="sellerName">Your Name *</label>
+          <input type="text" id="sellerName" placeholder="Enter your name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="sellerContact">Contact (Phone/Email) *</label>
+          <input type="text" id="sellerContact" placeholder="Phone or email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="bookImage">Book Image URL (Optional)</label>
+          <input type="url" id="bookImage" placeholder="https://example.com/image.jpg">
+        </div>
+
+        <button type="submit" class="submit-btn">Post Book</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Detail View Modal -->
+  <div id="detailModal" class="modal">
+    <div class="modal-content detail-modal-content">
+      <span class="close" id="closeDetail">&times;</span>
+      <div id="detailContent">
+        <!-- Detail content will be inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Professional Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>📚 StudentMart</h3>
+        <p>Your trusted platform for buying and selling study materials. Connect with fellow students and get the best deals on books and notes.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook">📘</a>
+          <a href="#" aria-label="Twitter">🐦</a>
+          <a href="#" aria-label="Instagram">📷</a>
+          <a href="#" aria-label="LinkedIn">💼</a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Browse Books</a></li>
+          <li><a href="#">Post a Book</a></li>
+          <li><a href="#">My Listings</a></li>
+          <li><a href="#">About Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="#">Computer Science</a></li>
+          <li><a href="#">Engineering</a></li>
+          <li><a href="#">Mathematics</a></li>
+          <li><a href="#">Science</a></li>
+          <li><a href="#">Other Subjects</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Safety Tips</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Contact Info</h4>
+        <p>📧 support@studentmart.com</p>
+        <p>📱 +91 98765 43210</p>
+        <p>📍 Ahmedabad, Gujarat, India</p>
+        <p style="margin-top: 15px; font-size: 13px;">GTU Students Community</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2024 StudentMart. All rights reserved.</p>
+      <p>Made with ❤️ for Students</p>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize sample books with GTU book images
+    const sampleBooks = [
+      {
+        id: Date.now() + 1,
+        name: "Computer Networks - GTU",
+        subject: "Computer Science",
+        description: "Complete guide to networking concepts for GTU students. Covers all units comprehensively.",
+        condition: "used",
+        publishYear: 2022,
+        price: 290,
+        sellerName: "Rahul Kumar",
+        sellerContact: "rahul@email.com",
+        image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&h=300&fit=crop",
+        timestamp: Date.now()
+      },
+      {
+        id: Date.now() + 2,
+        name: "Data Structures - GTU",
+        subject: "Computer Science",
+        description: "GTU prescribed textbook with solved examples and algorithms. Perfect for exam preparation.",
+        condition: "like-new",
+        publishYear: 2023,
+        price: 320,
+        sellerName: "Priya Sharma",
+        sellerContact: "9876543210",
+        image: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&h=300&fit=crop",
+        timestamp: Date.now() - 50000
+      },
+      {
+        id: Date.now() + 3,
+        name: "Database Management Systems",
+        subject: "Computer Science",
+        description: "GTU syllabus DBMS book with SQL queries and normalization examples. Includes practice questions.",
+        condition: "used",
+        publishYear: 2022,
+        price: 275,
+        sellerName: "Amit Patel",
+        sellerContact: "amit@email.com",
+        image: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=400&h=300&fit=crop",
+        timestamp: Date.now() - 100000
+      },
+      {
+        id: Date.now() + 4,
+        name: "Engineering Mathematics - GTU",
+        subject: "Mathematics",
+        description: "Complete mathematics for GTU Engineering students. All units with solved problems.",
+        condition: "new",
+        publishYear: 2023,
+        price: 350,
+        sellerName: "Sneha Reddy",
+        sellerContact: "9988776655",
+        image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=300&fit=crop",
+        timestamp: Date.now() - 150000
+      },
+      {
+        id: Date.now() + 5,
+        name: "Operating Systems - GTU",
+        subject: "Computer Science",
+        description: "GTU OS textbook covering process management, memory management, and file systems.",
+        condition: "like-new",
+        publishYear: 2022,
+        price: 300,
+        sellerName: "Vikram Singh",
+        sellerContact: "vikram@email.com",
+        image: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=400&h=300&fit=crop",
+        timestamp: Date.now() - 200000
+      },
+      {
+        id: Date.now() + 6,
+        name: "Python Programming - GTU",
+        subject: "Python",
+        description: "GTU Python textbook with practical examples and lab exercises. Perfect condition.",
+        condition: "new",
+        publishYear: 2023,
+        price: 280,
+        sellerName: "Anjali Verma",
+        sellerContact: "9876501234",
+        image: "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=400&h=300&fit=crop",
+        timestamp: Date.now() - 250000
+      },
+      {
+        id: Date.now() + 7,
+        name: "Software Engineering - GTU",
+        subject: "Engineering",
+        description: "Complete GTU software engineering book covering SDLC, testing, and project management.",
+        condition: "used",
+        publishYear: 2021,
+        price: 260,
+        sellerName: "Karan Mehta",
+        sellerContact: "karan@email.com",
+        image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop",
+        timestamp: Date.now() - 300000
+      },
+      {
+        id: Date.now() + 8,
+        name: "Web Technology - GTU",
+        subject: "Computer Science",
+        description: "GTU web technology book covering HTML, CSS, JavaScript, PHP and frameworks.",
+        condition: "like-new",
+        publishYear: 2023,
+        price: 310,
+        sellerName: "Divya Shah",
+        sellerContact: "9898765432",
+        image: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=400&h=300&fit=crop",
+        timestamp: Date.now() - 350000
+      },
+      {
+        id: Date.now() + 9,
+        name: "Computer Organization - GTU",
+        subject: "Computer Science",
+        description: "GTU COA textbook with processor architecture and assembly language programming.",
+        condition: "used",
+        publishYear: 2022,
+        price: 295,
+        sellerName: "Rohan Desai",
+        sellerContact: "rohan@email.com",
+        image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop",
+        timestamp: Date.now() - 400000
+      },
+      {
+        id: Date.now() + 10,
+        name: "Compiler Design - GTU",
+        subject: "Computer Science",
+        description: "GTU compiler design book with lexical analysis, parsing and code generation.",
+        condition: "new",
+        publishYear: 2023,
+        price: 330,
+        sellerName: "Nisha Patel",
+        sellerContact: "9876123450",
+        image: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=400&h=300&fit=crop",
+        timestamp: Date.now() - 450000
+      }
+    ];
+
+    // Storage management
+    async function loadBooks() {
+      try {
+        const result = await window.storage.get('books');
+        return result ? JSON.parse(result.value) : sampleBooks;
+      } catch (err) {
+        return sampleBooks;
+      }
+    }
+
+    async function saveBooks(books) {
+      try {
+        await window.storage.set('books', JSON.stringify(books));
+      } catch (err) {
+        console.error('Failed to save books:', err);
+      }
+    }
+
+    // Get elements
+    const modal = document.getElementById("bookModal");
+    const detailModal = document.getElementById("detailModal");
+    const openBtn = document.getElementById("openModalBtn");
+    const closeBtn = document.querySelector(".close");
+    const closeDetail = document.getElementById("closeDetail");
+    const bookForm = document.getElementById("bookForm");
+    const cardsContainer = document.getElementById("cardsContainer");
+    const searchInput = document.getElementById("searchInput");
+    const sortSelect = document.getElementById("sortSelect");
+    const conditionFilter = document.getElementById("conditionFilter");
+
+    let allBooks = [];
+
+    // Initialize
+    async function init() {
+      allBooks = await loadBooks();
+      displayBooks(allBooks);
+    }
+
+    // Display books
+    function displayBooks(books) {
+      cardsContainer.innerHTML = '';
+      
+      if (books.length === 0) {
+        cardsContainer.innerHTML = '<div class="no-results">No books found. Be the first to post!</div>';
+        return;
+      }
+
+      books.forEach(book => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${book.image || 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=300&fit=crop'}" alt="${book.name}" class="card-image">
+          <div class="card-content">
+            <h3>${book.name}</h3>
+            <p>${book.description || 'No description provided'}</p>
+            <div class="card-meta">
+              <span>📅 ${book.publishYear || 'N/A'}</span>
+              <span>📦 ${book.condition ? book.condition.replace('-', ' ').toUpperCase() : 'N/A'}</span>
+            </div>
+            <div class="price">₹${book.price}</div>
+            <div class="seller-info">
+              <strong>Seller:</strong> ${book.sellerName}
+            </div>
+            <div class="card-buttons">
+              <button onclick="viewDetails(${book.id})">View Details</button>
+              <button class="btn-delete" onclick="deleteBook(${book.id})">🗑️</button>
+            </div>
+          </div>
+        `;
+        cardsContainer.appendChild(card);
+      });
+    }
+
+    // Filter and sort books
+    function filterAndSortBooks() {
+      let filtered = [...allBooks];
+      
+      // Search filter
+      const searchTerm = searchInput.value.toLowerCase();
+      if (searchTerm) {
+        filtered = filtered.filter(book => 
+          book.name.toLowerCase().includes(searchTerm) ||
+          book.subject.toLowerCase().includes(searchTerm) ||
+          (book.description && book.description.toLowerCase().includes(searchTerm))
+        );
+      }
+
+      // Condition filter
+      const condition = conditionFilter.value;
+      if (condition !== 'all') {
+        filtered = filtered.filter(book => book.condition === condition);
+      }
+
+      // Sort
+      const sortBy = sortSelect.value;
+      if (sortBy === 'price-low') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (sortBy === 'price-high') {
+        filtered.sort((a, b) => b.price - a.price);
+      } else if (sortBy === 'newest') {
+        filtered.sort((a, b) => b.timestamp - a.timestamp);
+      }
+
+      displayBooks(filtered);
+    }
+
+    // View book details
+    window.viewDetails = function(bookId) {
+      const book = allBooks.find(b => b.id === bookId);
+      if (!book) return;
+
+      const detailContent = document.getElementById('detailContent');
+      detailContent.innerHTML = `
+        <img src="${book.image || 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=300&fit=crop'}" alt="${book.name}" class="detail-image">
+        <div class="detail-info">
+          <h3>${book.name}</h3>
+          <p><strong>Subject:</strong> ${book.subject}</p>
+          <p><strong>Description:</strong> ${book.description || 'No description provided'}</p>
+          <p><strong>Condition:</strong> ${book.condition ? book.condition.replace('-', ' ').toUpperCase() : 'N/A'}</p>
+          <p><strong>Publish Year:</strong> ${book.publishYear || 'N/A'}</p>
+          <p><strong>Price:</strong> <span style="color: #d32f2f; font-size: 1.5rem; font-weight: bold;">₹${book.price}</span></p>
+        </div>
+        <div class="seller-info" style="margin-top: 20px;">
+          <h3>Contact Seller</h3>
+          <p><strong>Name:</strong> ${book.sellerName}</p>
+          <p><strong>Contact:</strong> ${book.sellerContact}</p>
+        </div>
+      `;
+      
+      detailModal.style.display = "flex";
+    };
+
+    // Delete book
+    window.deleteBook = async function(bookId) {
+      if (confirm('Are you sure you want to delete this book?')) {
+        allBooks = allBooks.filter(b => b.id !== bookId);
+        await saveBooks(allBooks);
+        filterAndSortBooks();
+        showSuccessMessage('Book deleted successfully!');
+      }
+    };
+
+    // Show success message
+    function showSuccessMessage(message) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'success-message';
+      msgDiv.textContent = message;
+      document.body.appendChild(msgDiv);
+      
+      setTimeout(() => {
+        msgDiv.remove();
+      }, 3000);
+    }
+
+    // Modal controls
+    openBtn.onclick = () => modal.style.display = "flex";
+    closeBtn.onclick = () => modal.style.display = "none";
+    closeDetail.onclick = () => detailModal.style.display = "none";
+
+    window.onclick = (e) => {
+      if (e.target === modal) modal.style.display = "none";
+      if (e.target === detailModal) detailModal.style.display = "none";
+    };
+
+    // Form submission
+    bookForm.onsubmit = async (e) => {
+      e.preventDefault();
+      
+      const newBook = {
+        id: Date.now(),
+        name: document.getElementById('bookName').value,
+        subject: document.getElementById('subject').value,
+        description: document.getElementById('description').value,
+        condition: document.getElementById('condition').value,
+        publishYear: document.getElementById('publishYear').value,
+        price: parseFloat(document.getElementById('price').value),
+        sellerName: document.getElementById('sellerName').value,
+        sellerContact: document.getElementById('sellerContact').value,
+        image: document.getElementById('bookImage').value || 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=300&fit=crop',
+        timestamp: Date.now()
+      };
+
+      allBooks.unshift(newBook);
+      await saveBooks(allBooks);
+      
+      bookForm.reset();
+      modal.style.display = "none";
+      filterAndSortBooks();
+      
+      showSuccessMessage('Book posted successfully!');
+    };
+
+    // Event listeners
+    searchInput.addEventListener('input', filterAndSortBooks);
+    sortSelect.addEventListener('change', filterAndSortBooks);
+    conditionFilter.addEventListener('change', filterAndSortBooks);
+
+    // Initialize on load
+    init();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Exchange Corner - StudentMart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(-45deg, white);
+      background-size: 400% 400%;
+      animation: backgroundMove 15s ease infinite;
+      padding: 40px 20px;
+    }
+
+    @keyframes backgroundMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #022a53 0%, #044a7a 50%, #0669a8 100%);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(2, 42, 83, 0.3);
+      position: relative;
+      overflow: hidden;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 20px;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(199, 235, 227, 0.1) 0%, transparent 70%);
+      animation: headerPulse 8s ease-in-out infinite;
+    }
+
+    @keyframes headerPulse {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-10%, -10%); }
+    }
+
+    header h1 {
+      font-size: 3.5rem;
+      margin-bottom: 15px;
+      color: #c7ebe3;
+      position: relative;
+      z-index: 1;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      letter-spacing: 2px;
+    }
+
+    header p {
+      font-size: 1.3rem;
+      color: #ffffff;
+      position: relative;
+      z-index: 1;
+      opacity: 0.95;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    header .tagline {
+      font-size: 1rem;
+      color: #c7ebe3;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    .btn-home {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: #c7ebe3;
+      color: #022a53;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: background-color 0.3s;
+      padding: 8px 15px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .btn-home:hover {
+      background: #c7ebe3;
+    }
+  
+    .cards {
+      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 78px;
+      padding: 30px 50px;
+    }
+    .card {
+      width: 400px;
+      background:#c7ebe3;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      animation: fadeUp 1s ease;
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #97cdc1;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card h3 {
+      margin: 15px;
+      font-size: 25px;
+      color: #022a53;
+    }
+    .card p {
+      margin: 0 15px 10px;
+      color: #022a53;
+      font-size: 14px;
+    }
+
+    .card button{
+      width: calc(100% - 30px);
+      margin: 0 15px 15px;
+      padding: 10px;
+      background-color: #022a53;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    body{
+      background: #97cdc1
+    }
+
+    @keyframes fadeUp {
+      from {opacity: 0; transform: translateY(30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .card button:hover {
+       background-color: #044a7a;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center; align-items: center;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      width: 400px;
+      max-width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .modal-content h2 {
+      margin-bottom: 15px;
+      text-align: center;
+      color: #022a53;
+    }
+
+    form input, form textarea {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    form label {
+      font-weight: 500;
+      color: #022a53;
+      display: block;
+      margin-top: 10px;
+    }
+
+    form textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 10px;
+      background: #022a53;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+      background: #044a7a;
+    }
+
+    .close {
+      float: right;
+      font-size: 22px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #022a53;
+    }
+
+    .open-btn {
+      background:#022a53;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      margin: 20px auto;
+      display: block;
+    }
+
+    .open-btn:hover {
+      background: #044a7a;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .success-message {
+      background: #4CAF50;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .upload-choice {
+      display: flex;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .upload-choice label {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .upload-choice input[type="radio"] {
+      display: none;
+    }
+
+    .upload-choice input[type="radio"]:checked + label {
+      border-color: #022a53;
+      background: #c7ebe3;
+      font-weight: 600;
+    }
+
+    .upload-option {
+      display: none;
+    }
+
+    .upload-option.active {
+      display: block;
+    }
+
+    /* Footer Styles */
+    footer {
+      background: linear-gradient(135deg, #022a53 0%, #044a7a 100%);
+      color: white;
+      padding: 60px 40px 30px;
+      margin-top: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #c7ebe3, #97cdc1, #c7ebe3);
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-section h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: #c7ebe3;
+      font-weight: 600;
+    }
+
+    .footer-section p, .footer-section a {
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.8;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 10px;
+      transition: color 0.3s;
+    }
+
+    .footer-section a:hover {
+      color: #c7ebe3;
+      padding-left: 5px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      background: rgba(199, 235, 227, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    .social-links a:hover {
+      background: #c7ebe3;
+      color: #022a53;
+      transform: translateY(-3px);
+      padding: 0;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+
+    .post-book-section {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .footer .open-btn {
+      background: #c7ebe3;
+      color: #022a53;
+      font-size: 1.1rem;
+      padding: 15px 40px;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(199, 235, 227, 0.3);
+    }
+
+    .footer .open-btn:hover {
+      background: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(199, 235, 227, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <a href="index.html" class="btn-home">Back to Home</a>
+  </div>
+
+  <header>
+    <h1>📚 StudentMart Exchange</h1>
+    <p>Exchange Your Notes, Share Knowledge</p>
+    <div class="tagline">Building a community of learners, one book at a time</div>
+  </header>
+
+  <section class="cards" id="cardsContainer">
+    <div class="card">
+      <img src="df.jpeg" alt="Book 1">
+      <h3>Digital Fundamental</h3>
+      <p>Basic fundamentals with circuit diagram</p>
+      <p>Condition: Good</p>
+      <p>Available for exchange with OOP Notes</p>
+      <button class="exchange-btn" data-book="Digital Fundamental" data-exchange="OOP Notes">Request Exchange</button>
+    </div>
+
+    <div class="card">
+      <img src="oopex.jpeg" alt="Exchange books">
+      <h3>Object Oriented Programming</h3>
+      <p>Oops Concept</p>
+      <p>Condition: Used</p>
+      <p>Available for free exchange</p>
+      <button class="exchange-btn" data-book="Object Oriented Programming" data-exchange="Free">Request Exchange</button>
+    </div>
+
+    <div class="card">
+      <img src="maths ex.jpeg" alt="Exchange books">
+      <h3>Discrete Mathematics</h3>
+      <p>Math application | graph theory</p>
+      <p>Condition: New</p>
+      <p>Available for exchange with Machine Learning Notes</p>
+      <button class="exchange-btn" data-book="Discrete Mathematics" data-exchange="Machine Learning Notes">Request Exchange</button>
+    </div>
+
+    <div class="card">
+      <img src="phy.jpeg" alt="Exchange books">
+      <h3>Physics</h3>
+      <p>NEET Preparation | Advance Concepts</p>
+      <p>Condition: Used</p>
+      <p>Available for exchange with BME Notes</p>
+      <button class="exchange-btn" data-book="Physics" data-exchange="BME Notes">Request Exchange</button>
+    </div>
+
+    <div class="card">
+      <img src="zoology.jpeg" alt="Exchange books">
+      <h3>Fundamental Zoology</h3>
+      <p>GATE Preparation | Concepts with illustrative graphics</p>
+      <p>Condition: New</p>
+      <p>Available for exchange with Chemistry Notes</p>
+      <button class="exchange-btn" data-book="Fundamental Zoology" data-exchange="Chemistry Notes">Request Exchange</button>
+    </div>
+
+    <div class="card">
+      <img src="ml.jpeg" alt="Exchange books">
+      <h3>Machine Learning</h3>
+      <p>Fundamental of ML | Application & Algorithms</p>
+      <p>Condition: Good</p>
+      <p>Available for free exchange</p>
+      <button class="exchange-btn" data-book="Machine Learning" data-exchange="Free">Request Exchange</button>
+    </div>
+
+    <div class="card">
+      <img src="mechanical.jpeg" alt="Exchange books">
+      <h3>Basic Mechanical Engineering</h3>
+      <p>Useful for Competitive exams | B.Tech Students</p>
+      <p>Condition: Good</p>
+      <p>Available for exchange with Discrete Mathematics Notes</p>
+      <button class="exchange-btn" data-book="Basic Mechanical Engineering" data-exchange="Discrete Mathematics Notes">Request Exchange</button>
+    </div>
+
+    <div class="card">
+      <img src="chemistry.jpeg" alt="Exchange books">
+      <h3>Chemistry</h3>
+      <p>Problem-solving with unrivaled problem sets</p>
+      <p>Condition: Used</p>
+      <p>Available for free exchange</p>
+      <button class="exchange-btn" data-book="Chemistry" data-exchange="Free">Request Exchange</button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="post-book-section">
+      <h3 style="color: #c7ebe3; font-size: 2rem; margin-bottom: 15px;">Have Books to Exchange?</h3>
+      <p style="color: rgba(255,255,255,0.9); margin-bottom: 25px;">Join our community and start sharing knowledge today!</p>
+      <button id="openModalBtn" class="open-btn">📖 Post a Book</button>
+    </div>
+
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>About StudentMart</h3>
+        <p>StudentMart is a peer-to-peer platform where students can exchange educational materials, share knowledge, and build a collaborative learning community.</p>
+      </div>
+
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <a href="#home">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#contact">Contact</a>
+        <a href="#faq">FAQ</a>
+      </div>
+
+      <div class="footer-section">
+        <h3>Resources</h3>
+        <a href="#guidelines">Exchange Guidelines</a>
+        <a href="#safety">Safety Tips</a>
+        <a href="#terms">Terms of Service</a>
+        <a href="#privacy">Privacy Policy</a>
+      </div>
+
+      <div class="footer-section">
+        <h3>Connect With Us</h3>
+        <p>📧 support@studentmart.com</p>
+        <p>📞 +91 1234567890</p>
+        <div class="social-links">
+          <a href="#" title="Facebook">📘</a>
+          <a href="#" title="Twitter">🐦</a>
+          <a href="#" title="Instagram">📷</a>
+          <a href="#" title="LinkedIn">💼</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2024 StudentMart. All rights reserved. | Made with ❤️ for students</p>
+    </div>
+
+    <!-- Post Book Modal -->
+    <div id="bookModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closePostModal">&times;</span>
+        <h2>Post Your Book</h2>
+
+        <form id="postBookForm">
+          <label for="bookGiving">Book You're Giving</label>
+          <input type="text" id="bookGiving" placeholder="Enter book name you're offering" required>
+
+          <label for="bookDescription">Description (Optional)</label>
+          <input type="text" id="bookDescription" placeholder="e.g., NEET Preparation, Basic concepts">
+
+          <label for="condition">Book's Condition</label>
+          <select id="condition" required style="width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px;">
+            <option value="">Select condition</option>
+            <option value="New">New</option>
+            <option value="Good">Good</option>
+            <option value="Used">Used</option>
+          </select>
+
+          <label for="bookWant">Book You Want in Exchange</label>
+          <input type="text" id="bookWant" placeholder="Enter book name or 'Free' for free exchange" required>
+
+          <label>Upload Book Image</label>
+          <div class="upload-choice">
+            <input type="radio" name="uploadType" id="uploadURL" value="url" checked>
+            <label for="uploadURL">Image URL</label>
+            
+            <input type="radio" name="uploadType" id="uploadFile" value="file">
+            <label for="uploadFile">Upload File</label>
+          </div>
+
+          <div id="urlOption" class="upload-option active">
+            <input type="url" id="imageURL" placeholder="https://example.com/image.jpg">
+          </div>
+
+          <div id="fileOption" class="upload-option">
+            <input type="file" id="imageFile" accept="image/*">
+          </div>
+
+          <button type="submit" class="submit-btn">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Exchange Request Modal -->
+    <div id="exchangeModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeExchangeModal">&times;</span>
+        <div class="success-message" id="successMessage">Request sent successfully!</div>
+        <h2>Request Exchange</h2>
+
+        <form id="exchangeForm">
+          <label for="requestedBook">Book You Want:</label>
+          <input type="text" id="requestedBook" readonly>
+
+          <label for="exchangeFor">They Want in Exchange:</label>
+          <input type="text" id="exchangeFor" readonly>
+
+          <label for="yourName">Your Name:</label>
+          <input type="text" id="yourName" placeholder="Enter your name" required>
+
+          <label for="yourEmail">Your Email:</label>
+          <input type="email" id="yourEmail" placeholder="Enter your email" required>
+
+          <label for="yourPhone">Your Phone:</label>
+          <input type="tel" id="yourPhone" placeholder="Enter your phone number" required>
+
+          <label for="message">Message (Optional):</label>
+          <textarea id="message" placeholder="Add any additional information..."></textarea>
+
+          <button type="submit" class="submit-btn">Send Request</button>
+        </form>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Get modal elements
+    const bookModal = document.getElementById("bookModal");
+    const exchangeModal = document.getElementById("exchangeModal");
+    const openBtn = document.getElementById("openModalBtn");
+    const closePostBtn = document.getElementById("closePostModal");
+    const closeExchangeBtn = document.getElementById("closeExchangeModal");
+    const successMessage = document.getElementById("successMessage");
+    const cardsContainer = document.getElementById("cardsContainer");
+
+    // Handle upload type selection
+    const uploadURL = document.getElementById("uploadURL");
+    const uploadFile = document.getElementById("uploadFile");
+    const urlOption = document.getElementById("urlOption");
+    const fileOption = document.getElementById("fileOption");
+
+    uploadURL.addEventListener('change', () => {
+      if (uploadURL.checked) {
+        urlOption.classList.add('active');
+        fileOption.classList.remove('active');
+      }
+    });
+
+    uploadFile.addEventListener('change', () => {
+      if (uploadFile.checked) {
+        fileOption.classList.add('active');
+        urlOption.classList.remove('active');
+      }
+    });
+
+    // Post Book Modal
+    openBtn.onclick = () => bookModal.style.display = "flex";
+    closePostBtn.onclick = () => bookModal.style.display = "none";
+
+    // Exchange Request Modal
+    closeExchangeBtn.onclick = () => {
+      exchangeModal.style.display = "none";
+      successMessage.style.display = "none";
+    };
+
+    // Close on Outside Click
+    window.onclick = (e) => {
+      if (e.target == bookModal) bookModal.style.display = "none";
+      if (e.target == exchangeModal) {
+        exchangeModal.style.display = "none";
+        successMessage.style.display = "none";
+      }
+    };
+
+    // Function to create a new book card
+    function createBookCard(bookData) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      
+      const imgSrc = bookData.imageURL || (bookData.imageFile ? URL.createObjectURL(bookData.imageFile) : 'https://via.placeholder.com/400x200?text=Book+Cover');
+      
+      card.innerHTML = `
+        <img src="${imgSrc}" alt="${bookData.bookGiving}" onerror="this.src='https://via.placeholder.com/400x200?text=Book+Cover'">
+        <h3>${bookData.bookGiving}</h3>
+        ${bookData.description ? `<p>${bookData.description}</p>` : ''}
+        <p>Condition: ${bookData.condition}</p>
+        <p>Available for exchange with ${bookData.bookWant}</p>
+        <button class="exchange-btn" data-book="${bookData.bookGiving}" data-exchange="${bookData.bookWant}">Request Exchange</button>
+      `;
+      
+      return card;
+    }
+
+    // Function to attach exchange button listeners
+    function attachExchangeListeners() {
+      const exchangeButtons = document.querySelectorAll('.exchange-btn');
+      exchangeButtons.forEach(btn => {
+        btn.onclick = () => {
+          const bookName = btn.getAttribute('data-book');
+          const exchangeFor = btn.getAttribute('data-exchange');
+          
+          document.getElementById('requestedBook').value = bookName;
+          document.getElementById('exchangeFor').value = exchangeFor;
+          
+          exchangeModal.style.display = "flex";
+        };
+      });
+    }
+
+    // Initial attachment of listeners
+    attachExchangeListeners();
+
+    // Handle Post Book Form Submission
+    document.getElementById('postBookForm').onsubmit = (e) => {
+      e.preventDefault();
+      
+      const uploadType = document.querySelector('input[name="uploadType"]:checked').value;
+      const imageFile = document.getElementById('imageFile').files[0];
+      const imageURL = document.getElementById('imageURL').value;
+      
+      const bookData = {
+        bookGiving: document.getElementById('bookGiving').value,
+        description: document.getElementById('bookDescription').value,
+        condition: document.getElementById('condition').value,
+        bookWant: document.getElementById('bookWant').value,
+        imageURL: uploadType === 'url' ? imageURL : null,
+        imageFile: uploadType === 'file' ? imageFile : null,
+        timestamp: new Date().toLocaleString()
+      };
+      
+      console.log('Book Posted:', bookData);
+      
+      // Create and add the new book card
+      const newCard = createBookCard(bookData);
+      cardsContainer.appendChild(newCard);
+      
+      // Attach listeners to the new button
+      attachExchangeListeners();
+      
+      // Show success message
+      alert(`✅ Book Posted Successfully!\n\nBook: ${bookData.bookGiving}\nCondition: ${bookData.condition}\nExchange For: ${bookData.bookWant}\n\nYour book is now visible on the exchange board!`);
+      
+      bookModal.style.display = "none";
+      document.getElementById('postBookForm').reset();
+      urlOption.classList.add('active');
+      fileOption.classList.remove('active');
+    };
+
+    // Handle Exchange Request Form Submission
+    document.getElementById('exchangeForm').onsubmit = (e) => {
+      e.preventDefault();
+      
+      const requestData = {
+        requestedBook: document.getElementById('requestedBook').value,
+        exchangeFor: document.getElementById('exchangeFor').value,
+        name: document.getElementById('yourName').value,
+        email: document.getElementById('yourEmail').value,
+        phone: document.getElementById('yourPhone').value,
+        message: document.getElementById('message').value,
+        timestamp: new Date().toLocaleString()
+      };
+      
+      console.log('Exchange Request:', requestData);
+      
+      // Show success message
+      successMessage.style.display = "block";
+      
+      // Reset form and close modal after 2 seconds
+      setTimeout(() => {
+        exchangeModal.style.display = "none";
+        successMessage.style.display = "none";
+        document.getElementById('exchangeForm').reset();
+      }, 2000);
+    };
+  </script>
+
+</body>
+</html>

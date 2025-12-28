@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudentMart.in - Marketplace for Students</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #022a53 0%, #044a7a 100%);
+      padding: 20px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo a {
+      color: #c7ebe3;
+      font-size: 2rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #c7ebe3;
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .auth {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .auth a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .start-btn {
+      background: #c7ebe3;
+      color: #022a53;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(199, 235, 227, 0.4);
+    }
+
+    /* Hero Section */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      padding: 80px 50px;
+      background: linear-gradient(135deg, #97cdc1 0%, #c7ebe3 100%);
+      align-items: center;
+    }
+
+    .hero-text h1 {
+      font-size: 3rem;
+      color: #022a53;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .hero-text p {
+      font-size: 1.3rem;
+      color: #044a7a;
+      margin-bottom: 30px;
+    }
+
+    .search-bar {
+      display: flex;
+      background: white;
+      border-radius: 50px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-bar input {
+      flex: 1;
+      border: none;
+      padding: 18px 25px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .search-bar button {
+      background: #022a53;
+      color: white;
+      border: none;
+      padding: 18px 40px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .search-bar button:hover {
+      background: #044a7a;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Stats Section */
+    .stats-section {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      padding: 60px 50px;
+      background: white;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 30px;
+      background: linear-gradient(135deg, #97cdc1 0%, #c7ebe3 100%);
+      border-radius: 15px;
+      transition: transform 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .stat-icon {
+      font-size: 3rem;
+      color: #022a53;
+      margin-bottom: 15px;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #022a53;
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      color: #044a7a;
+      font-weight: 500;
+    }
+
+    /* Features Section */
+    .features-section {
+      padding: 80px 50px;
+      background: #f8f9fa;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      color: #022a53;
+      margin-bottom: 15px;
+    }
+
+    .section-header p {
+      font-size: 1.2rem;
+      color: #6b7280;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s;
+      text-align: center;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .feature-icon {
+      font-size: 3.5rem;
+      color: #022a53;
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      color: #022a53;
+      margin-bottom: 15px;
+    }
+
+    .feature-card p {
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .feature-btn {
+      background: linear-gradient(135deg, #022a53 0%, #044a7a 100%);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .feature-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(2, 42, 83, 0.3);
+    }
+
+    /* Categories Section */
+    .categories-section {
+      padding: 80px 50px;
+      background: linear-gradient(135deg, #97cdc1 0%, #c7ebe3 100%);
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+    }
+
+    .category-card {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .category-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .category-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .category-card h4 {
+      color: #022a53;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .category-card p {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    /* How It Works */
+    .how-it-works {
+      padding: 80px 50px;
+      background: white;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      margin-top: 50px;
+    }
+
+    .step-card {
+      position: relative;
+      text-align: center;
+    }
+
+    .step-number {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #022a53 0%, #044a7a 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 auto 20px;
+      box-shadow: 0 10px 30px rgba(2, 42, 83, 0.3);
+    }
+
+    .step-card h4 {
+      color: #022a53;
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+
+    .step-card p {
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    /* Testimonials */
+    .testimonials-section {
+      padding: 80px 50px;
+      background: #f8f9fa;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .testimonial-card {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      position: relative;
+    }
+
+    .quote-icon {
+      font-size: 3rem;
+      color: #c7ebe3;
+      opacity: 0.3;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
+    .testimonial-text {
+      color: #374151;
+      line-height: 1.8;
+      margin-bottom: 20px;
+      font-style: italic;
+      position: relative;
+      z-index: 1;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .author-avatar {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #97cdc1 0%, #c7ebe3 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: #022a53;
+      font-weight: 700;
+    }
+
+    .author-info h5 {
+      color: #022a53;
+      margin-bottom: 5px;
+    }
+
+    .author-info p {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 80px 50px;
+      background: linear-gradient(135deg, #022a53 0%, #044a7a 100%);
+      text-align: center;
+      color: white;
+    }
+
+    .cta-section h2 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .cta-section p {
+      font-size: 1.3rem;
+      margin-bottom: 40px;
+      opacity: 0.9;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .cta-btn-primary {
+      background: #c7ebe3;
+      color: #022a53;
+      padding: 18px 40px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .cta-btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(199, 235, 227, 0.4);
+    }
+
+    .cta-btn-secondary {
+      background: transparent;
+      color: white;
+      padding: 18px 40px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: 2px solid white;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .cta-btn-secondary:hover {
+      background: white;
+      color: #022a53;
+    }
+
+    /* Footer */
+    footer {
+      background: #1f2937;
+      color: white;
+      padding: 60px 50px 30px;
+    }
+
+    .footer-container {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-logo h2 {
+      color: #c7ebe3;
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .footer-desc {
+      color: #d1d5db;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .footer-links h3 {
+      color: #c7ebe3;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+
+    .footer-links ul {
+      list-style: none;
+    }
+
+    .footer-links ul li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links ul li a {
+      color: #d1d5db;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links ul li a:hover {
+      color: #c7ebe3;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-icons a {
+      width: 40px;
+      height: 40px;
+      background: rgba(199, 235, 227, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c7ebe3;
+      transition: all 0.3s;
+    }
+
+    .social-icons a:hover {
+      background: #c7ebe3;
+      color: #022a53;
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #d1d5db;
+    }
+
+    .signup-btn {
+      background: #c7ebe3;
+      color: #022a53;
+      padding: 8px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 10px;
+      transition: all 0.3s;
+    }
+
+    .signup-btn:hover {
+      background: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .features-grid, .categories-grid, .steps-grid, .testimonials-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-section {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 20px;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .hero-text h1 {
+        font-size: 2rem;
+      }
+
+      .features-grid, .categories-grid, .steps-grid, .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <a href="index.html">StudentMart.in</a>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="product.html">Post Item</a>
+      <a href="exchange.html">Exchange Corner</a>
+      <a href="feedback.html">Feedback</a>
+    </nav>
+    <div class="auth">
+      <a href="login.html">Login</a>
+      <button class="start-btn" onclick="window.location.href='register.html'">Start For Free</button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>"Don't Waste, Exchange! Find or Sell Academic Stuff Easily!"</h1>
+      <p>Books, Lab Tools, Notes & more from fellow students.</p>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Study Smarter, Spend Lesser – Explore...." />
+        <button onclick="performSearch()">Search</button>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="image.png" alt="Stack of Books" />
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="stat-card">
+      <div class="stat-icon">📚</div>
+      <div class="stat-number">5000+</div>
+      <div class="stat-label">Items Listed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <div class="stat-number">2500+</div>
+      <div class="stat-label">Active Users</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🤝</div>
+      <div class="stat-number">3200+</div>
+      <div class="stat-label">Successful Deals</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-number">₹2L+</div>
+      <div class="stat-label">Money Saved</div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="section-header">
+      <h2>What Makes StudentMart.in Special?</h2>
+      <p>Your complete marketplace for educational resources</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🛒</div>
+        <h3>Sell Your Items</h3>
+        <p>List your books, notes, and lab tools easily. Set your own prices and earn money from unused items.</p>
+        <button class="feature-btn" onclick="window.location.href='product.html'">Start Selling</button>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <h3>Rent & Save</h3>
+        <p>Need something temporarily? Rent lab equipment and study materials at affordable rates.</p>
+        <button class="feature-btn" onclick="window.location.href='product.html'">Browse Rentals</button>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎁</div>
+        <h3>Donate & Help</h3>
+        <p>Give your old books and notes to students who need them. Make education accessible to all.</p>
+        <button class="feature-btn" onclick="window.location.href='exchange.html'">Donate Now</button>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h3>Ai Assistant</h3>
+        <p>For Doubts regarding book and other you can chat with our AI assistant.</p>
+        <button class="feature-btn" onclick="alert('Chat feature coming soon!')">Learn More</button>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Smart Search</h3>
+        <p>Find exactly what you need with our advanced search filters. Search by subject, price, condition and more.</p>
+        <button class="feature-btn" onclick="document.getElementById('searchInput').focus()">Try Search</button>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Safe & Secure</h3>
+        <p>Verified student accounts and secure transactions. Buy and sell with confidence.</p>
+        <button class="feature-btn" onclick="window.location.href='register.html'">Join Now</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="categories-section">
+    <div class="section-header">
+      <h2>Browse by Category</h2>
+      <p>Find what you need quickly</p>
+    </div>
+    <div class="categories-grid">
+      <div class="category-card" onclick="searchCategory('books')">
+        <div class="category-icon">📚</div>
+        <h4>Books</h4>
+        <p>Textbooks, Reference Books, Novels</p>
+      </div>
+      <div class="category-card" onclick="searchCategory('notes')">
+        <div class="category-icon">📝</div>
+        <h4>Notes</h4>
+        <p>Handwritten, Printed, Digital</p>
+      </div>
+      <div class="category-card" onclick="searchCategory('lab-tools')">
+        <div class="category-icon">🔬</div>
+        <h4>Lab Tools</h4>
+        <p>Equipment, Instruments, Kits</p>
+      </div>
+      <div class="category-card" onclick="searchCategory('study-materials')">
+        <div class="category-icon">📖</div>
+        <h4>Study Materials</h4>
+        <p>Question Papers, Guides, PDFs</p>
+      </div>
+      <div class="category-card" onclick="searchCategory('stationery')">
+        <div class="category-icon">✏️</div>
+        <h4>Stationery</h4>
+        <p>Pens, Notebooks, Calculators</p>
+      </div>
+      <div class="category-card" onclick="searchCategory('electronics')">
+        <div class="category-icon">💻</div>
+        <h4>Electronics</h4>
+        <p>Calculators, USB Drives, Gadgets</p>
+      </div>
+      <div class="category-card" onclick="searchCategory('sports')">
+        <div class="category-icon">⚽</div>
+        <h4>Sports Items</h4>
+        <p>Equipment, Accessories, Gear</p>
+      </div>
+      <div class="category-card" onclick="searchCategory('other')">
+        <div class="category-icon">📦</div>
+        <h4>Other</h4>
+        <p>Miscellaneous Items</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <div class="section-header">
+      <h2>How StudentMart.in Works</h2>
+      <p>Get started in 4 simple steps</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h4>Create Account</h4>
+        <p>Sign up for free with your student email. Quick and easy registration.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h4>List or Browse</h4>
+        <p>Post items you want to sell, rent, or donate. Or browse what others are offering.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h4>Connect & Chat</h4>
+        <p>Message buyers or sellers directly. Discuss details and negotiate prices.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <h4>Complete Deal</h4>
+        <p>Meet up safely, exchange items, and leave feedback for the community.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials-section">
+    <div class="section-header">
+      <h2>What Students Say</h2>
+      <p>Real experiences from our community</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p class="testimonial-text">Sold my engineering textbooks within 2 days! Made ₹5000 from books I no longer needed. The direct chat feature made everything so simple.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">RM</div>
+          <div class="author-info">
+            <h5>Rahul Mehta</h5>
+            <p>B.Tech, 4th Year</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p class="testimonial-text">Found lab equipment for rent at 1/10th the buying price. Saved so much money during my final year project. Highly recommend!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">PS</div>
+          <div class="author-info">
+            <h5>Priya Singh</h5>
+            <p>M.Sc Chemistry</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p class="testimonial-text">Someone donated their complete notes collection to me. It helped me so much during exams. Now I'm paying it forward by donating mine!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AK</div>
+          <div class="author-info">
+            <h5>Arjun Kumar</h5>
+            <p>BBA, 2nd Year</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <h2>Ready to Start?</h2>
+    <p>Join thousands of students already saving money and sharing resources</p>
+    <div class="cta-buttons">
+      <button class="cta-btn-primary" onclick="window.location.href='register.html'">Sign Up Free</button>
+      <button class="cta-btn-secondary" onclick="window.location.href='product.html'">Browse Items</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div>
+        <div class="footer-logo">
+          <h2>StudentMart.in</h2>
+        </div>
+        <p class="footer-desc">
+          StudentMart.in is your one-stop marketplace to sell, rent, or donate educational resources. 
+          Save money, share knowledge, and help fellow students succeed.
+        </p>
+      </div>
+      
+      <div class="footer-links">
+        <h3>Explore</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="exchange.html">Exchange Corner</a></li>
+          <li><a href="product.html">Post Item</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="#" onclick="alert('FAQ page coming soon!')">FAQ</a></li>
+          <li><a href="#" onclick="alert('Help Center coming soon!')">Help Center</a></li>
+          <li><a href="feedback.html">Feedback</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h3>Community</h3>
+        <ul>
+          <li><a href="#" onclick="alert('Chat feature coming soon!')">Chat</a></li>
+          <li><a href="#" onclick="alert('Stories coming soon!')">Student Stories</a></li>
+          <li><a href="#" onclick="alert('Events coming soon!')">Events</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h3>Follow Us</h3>
+        <div class="social-icons">
+          <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook"></i></a>
+          <a href="https://in.linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
+          <a href="https://x.com/" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+          
